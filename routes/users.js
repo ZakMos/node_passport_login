@@ -53,14 +53,15 @@ router.post('/register', (req, res) => {
               password,
               password2
             });
-          } else  {
+          } else {
             const newUser = new User({
               name,
               email,
               password
             });
+
                 //Hash Password
-                bcrypt.genSalt(10, (err, salt) => 
+                bcrypt.genSalt(10, (err, salt) => {
                   bcrypt.hash(newUser.password, salt, (err, hash) => {
                     if(err) throw err;
                     //Set Password to hashed
@@ -68,14 +69,17 @@ router.post('/register', (req, res) => {
                     // Save User
                     newUser.save()
                     .then(user => {
+                      req.flash(
+                        'success_msg', 
+                        'Your are now registered and can log in');
                       res.redirect('/users/login');
                     })
                     .catch(err => console.log(err));
-                }))           
+                  });
+                });
               }
-          });
-    }
-
-});
+            });
+          }
+        });
 
 module.exports = router;
