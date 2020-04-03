@@ -23,6 +23,7 @@
                     name="email"
                     class="form-control"
                     placeholder="Enter your Email"
+                    autocomplete="username"
                     value="<%= typeof email != 'undefined' ? email : '' %>"
                     />
                 </div>
@@ -34,7 +35,8 @@
                     name="password"
                     class="form-control"
                     placeholder="Create password"
-                    value="<%= typeof email != 'undefined' ? password : '' %>"
+                    autocomplete="new-password"
+                    value="<%= typeof password != 'undefined' ? password : '' %>"
                     />
                 </div>
                 <div class="form-group">
@@ -45,7 +47,8 @@
                     name="password2"
                     class="form-control"
                     placeholder="Confirm Password"
-                    value="<%= typeof email != 'undefined' ? password2 : '' %>"
+                    autocomplete="new-password"
+                    value="<%= typeof password2 != 'undefined' ? password2 : '' %>"
                     />
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Register</button>
