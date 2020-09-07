@@ -1,3 +1,4 @@
+// @ts-nocheck
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const bodyparser = require('body-parser');

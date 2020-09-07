@@ -1,18 +1,15 @@
-// @ts-ignore
+// @ts-nocheck
 const express = require('express');
 const router = express.Router();
-// @ts-ignore
-const { ensureAuthenticated } = require ('../config/auth');
+const { ensureAuthenticated, forwardAuthenticated  } = require ('../config/auth');
 
 // Welcome Page
-// @ts-ignore
-router.get('/', (_req, res) => res.render('welcome'));
+router.get('/', forwardAuthenticated, (req, res) => res.render('welcome'));
 
 // Dashboard Page
-// @ts-ignore
 router.get('/dashboard', ensureAuthenticated, (req, res) => 
     res.render('dashboard', {
-        name: req.user.name
+        user: req.user
     }));
 
 module.exports = router;
