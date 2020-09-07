@@ -1,14 +1,11 @@
-// @ts-ignore
+// @ts-nocheck
 const express = require('express');
 const router = express.Router();
-// @ts-ignore
 const bcrypt = require('bcryptjs');
-// @ts-ignore
 const passport = require('passport');
-
 // User model
-// @ts-ignore
 const User = require('../models/User');
+const { forwardAuthenticated } = require('../config/auth');
 
 // Login Page
 // router.get('/login', (req, res) => { 
@@ -18,23 +15,25 @@ const User = require('../models/User');
 //     res.render("/dashboard");
 //   }
 // })
-// @ts-ignore
-router.get('/login', (req, res) => res.render("login"));
+router.get('/login', forwardAuthenticated, (req, res) => res.render("login"));
 
 // Register Page
-// @ts-ignore
-router.get('/register', (req, res) => res.render("register"));
+router.get('/register', forwardAuthenticated, (req, res) => res.render("register"));
 
 // Register Handle
-// @ts-ignore
-router.post('/register', (req, res) => {
+router.post('/register',(req, res) => {
     const { name, email, password, password2 } = req.body;
-    // @ts-ignore
     let errors = [];
-
+    if(name.length < 3) {
+      errors.push({ msg: 'User Name should be at least 3 characters' })
+    }
     // Check required fields 
     if(!name || !email || !password || !password2) {
         errors.push({ msg: 'Please fill in all fields' })
+    }
+    // Check email validation 
+     if(email.length <= 7 || email.length > 254) {
+      errors.push({ msg: 'Please enter a valid email'})
     }
 
     // Check Passwords match
@@ -57,13 +56,11 @@ router.post('/register', (req, res) => {
       } else {
         // Validation passed 
         User.findOne({ email: email })
-       // @ts-ignore
        .then(user => {
           if (user) {
             // User exists
             errors.push({ msg: 'Email already exists' });
             res.render('register', {
-              // @ts-ignore
               errors,
               name,
               email,
@@ -78,23 +75,19 @@ router.post('/register', (req, res) => {
             });
 
                 //Hash Password
-                // @ts-ignore
                 bcrypt.genSalt(10, (err, salt) => {
-                  // @ts-ignore
                   bcrypt.hash(newUser.password, salt, (err, hash) => {
                     if(err) throw err;
                     //Set Password to hashed
                     newUser.password = hash;
                     // Save User
                     newUser.save()
-                    // @ts-ignore
                     .then(user => {
                       req.flash(
                         'success_msg', 
                         'You are now registered and can log in');
                       res.redirect('/users/login');
                     })
-                    // @ts-ignore
                     .catch(err => console.log(err));
                   });
                 });
@@ -104,7 +97,6 @@ router.post('/register', (req, res) => {
         });
 
 // Login Handle
-// @ts-ignore
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', {
     successRedirect: '/dashboard',
@@ -114,7 +106,6 @@ router.post('/login', (req, res, next) => {
 })
 
 // Logout Handle
-// @ts-ignore
 router.get('/logout', (req, res) => {
   req.logout();
   req.flash('success_msg', 'You are logged out');
