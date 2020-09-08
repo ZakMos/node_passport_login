@@ -1,4 +1,7 @@
 // @ts-nocheck
+if(process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const bodyparser = require('body-parser');
@@ -32,7 +35,7 @@ app.use(bodyparser.urlencoded({ extended: false }));
 // Express session
 app.use(
     session({
-      secret: 'secret',
+      secret: process.env.SESSION_SECRET,
       resave: true,
       saveUninitialized: true
     })
