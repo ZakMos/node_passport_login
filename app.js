@@ -8,6 +8,7 @@ const expressLayouts = require('express-ejs-layouts');
 const bodyparser = require('body-parser');
 const flash = require('connect-flash');
 const session = require('express-session');
+const mongoose = require('mongoose');
 const passport = require('passport');
 
 const app = express();
@@ -19,7 +20,6 @@ require('./config/passport')(passport);
 // const db = require('./config/keys').DB_CONNECT;
 
 // Connect to Mongo 
-const mongoose = require('mongoose');
 mongoose.connect(process.env.DATABASE_URL, { 
     useNewUrlParser: true,
     useUnifiedTopology: true })
