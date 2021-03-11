@@ -2,6 +2,7 @@
 if(process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
+const cool = require('cool-ascii-faces');
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const bodyparser = require('body-parser');
@@ -63,5 +64,5 @@ app.use('/', require ('./routes/index'));
 app.use('/users', require ('./routes/users'));
 
 const PORT = process.env.PORT || 5000;
-
+app.get('/cool', (req, res) => res.render(cool()))
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
